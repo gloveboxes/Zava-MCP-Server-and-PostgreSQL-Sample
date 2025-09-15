@@ -15,5 +15,5 @@ python-dotenv>=1.1.1,<2.0.0
 PyYAML>=6.0,<7.0.0
 
 # OpenTelemetry for observability
-opentelemetry-instrumentation-starlette>=0.57b0, <1.0.0
-opentelemetry-instrumentation-asyncpg>=0.57b0, <1.0.0
+opentelemetry-instrumentation-starlette>=0.58b0, <1.0.0
+opentelemetry-instrumentation-asyncpg>=0.58b0, <1.0.0
