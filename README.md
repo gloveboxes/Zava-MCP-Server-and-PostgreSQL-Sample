@@ -11,19 +11,21 @@ A Model Context Protocol (MCP) server that provides comprehensive customer sales
 
 ## Getting Started
 
+Open a terminal window and running the following commands:
+
 1. Authenticate with Azure CLI
 
     ```bash
     az login
     ```
 
-1. Clone the repository
+2. Clone the repository
 
     ```bash
     git clone https://github.com/gloveboxes/Zava-MCP-Server-and-PostgreSQL-Sample
     ```
 
-1. Navigate to the project directory
+3. Navigate to the project directory
 
     ```bash
     cd Zava-MCP-Server-and-PostgreSQL-Sample
@@ -78,6 +80,12 @@ docker compose down -v
 
 The following assumes you'll be using the built-in VS Code MCP server support.
 
+1. Open the project in VS Code. From the terminal, run:
+
+    ```bash
+    code .
+    ```
+
 1. Start one or more of the MCP server from the `.vscode/mcp.json` configuration
 
     ```json
@@ -120,7 +128,6 @@ The following assumes you'll be using the built-in VS Code MCP server support.
 1. Show sales by store
 1. What were the last quarter's sales by category?
 1. What products do we sell that are similar to "containers for paint"
-
 
 ## Features
 
@@ -227,7 +234,6 @@ When a user connects with a specific store's RLS User ID, they will only see:
 - Store-specific sales and performance metrics
 
 This ensures data isolation between different store locations while maintaining a unified database schema.
-
 
 ## Architecture
 
