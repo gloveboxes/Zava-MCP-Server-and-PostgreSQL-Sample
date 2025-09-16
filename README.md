@@ -51,7 +51,7 @@ cd infra && ./deploy.ps1
 cd infra && ./deploy.sh
 ```
 
-## Running with Docker Compose (Recommended)
+## Running the MCP Server
 
 The easiest way to run the complete stack (PostgreSQL + MCP Server) is using Docker Compose:
 
