@@ -116,7 +116,7 @@ The following assumes you'll be using the built-in VS Code MCP server support.
     }
     ```
 
-### Open VS Code AI
+### Open VS Code AI Chat
 
 1. Open AI Chat mode in VS Code
 2. Type **#zava** and select one of the MCP servers you started
