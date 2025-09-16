@@ -8,9 +8,24 @@ A Model Context Protocol (MCP) server that provides comprehensive customer sales
 2. **Azure OpenAI Resource**: Must have an Azure OpenAI `text-embedding-3-small` and optionally `gpt-4o-mini` resource deployed
 3. **Proper Permissions**: Access to create service principals and assign roles
 
-### Automated Service Principal Setup
+## Getting Started
 
-Run the following scripts to automate the deployment of Azure resources and creation of a service principal with the necessary permissions.
+1. Authenticate with Azure CLI
+
+    ```bash
+    az login
+    ```
+
+1. Clone the repository
+
+    ```bash
+    git clone https://github.com/gloveboxes/Zava-MCP-Server-and-PostgreSQL-Sample
+    cd Zava-MCP-Server-and-PostgreSQL-Sample
+    ```
+
+### Deploy Azure Resources
+
+Run the following scripts to automate the deployment of Azure resources needed for the MCP server.
 
 By default, the scripts will deploy both the `text-embedding-3-small`. Optionally, you can choose to deploy the `gpt-4o-mini` model as well. The scripts will prompt you to include the GPT model deployment.
 
@@ -43,8 +58,14 @@ docker compose up -d
 # View logs
 docker compose logs -f
 
+# View MCP Server Logs
+docker compose logs -f mcp-server
+
+# View the PostgreSQL Logs
+docker compose logs -f postgres
+
 # Stop the stack
-docker compose down
+docker compose down -v
 ```
 
 ## Features
