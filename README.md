@@ -2,33 +2,17 @@
 
 A Model Context Protocol (MCP) server that provides comprehensive customer sales database access for Zava Retail DIY Business. This server enables AI assistants to query and analyze retail sales data through a secure, schema-aware interface.
 
-## Azure Authentication Setup
-
-The MCP server requires Azure authentication to access Azure OpenAI services for semantic search functionality. This section provides complete instructions for setting up the required credentials.
-
-### Prerequisites
+## Prerequisites
 
 1. **Azure CLI**: Install and authenticate with Azure CLI
-2. **Azure OpenAI Resource**: Must have an Azure OpenAI `text-embedding-3-small` resource deployed
+2. **Azure OpenAI Resource**: Must have an Azure OpenAI `text-embedding-3-small` and optionally `gpt-4o-mini` resource deployed
 3. **Proper Permissions**: Access to create service principals and assign roles
-
-### Environment Configuration
-
-1. Open the project from a terminal window.
-1. Copy `.env.template` to `.env` and configure your environment variables:
-
-```bash
-cp .env.template .env
-```
 
 ### Automated Service Principal Setup
 
-We provide automated scripts to simplify the service principal creation process. These scripts will:
+Run the following scripts to automate the deployment of Azure resources and creation of a service principal with the necessary permissions.
 
-1. Automatically discover your Azure AI Services
-2. Let you select which service to use
-3. Create the service principal with proper permissions
-4. Update your `.env` file with the credentials
+By default, the scripts will deploy both the `text-embedding-3-small`. Optionally, you can choose to deploy the `gpt-4o-mini` model as well. The scripts will prompt you to include the GPT model deployment.
 
 **Choose the script for your platform:**
 
@@ -36,30 +20,15 @@ We provide automated scripts to simplify the service principal creation process.
 
 ```powershell
 # Run from the project root directory
-scripts/create_sp.ps1
+cd infra && ./deploy.ps1
 ```
 
 #### macOS/Linux (Bash)
 
 ```bash
 # Run from the project root directory
-scripts/create_sp.sh
+cd infra && ./deploy.sh
 ```
-
-**Both scripts will:**
-
-- Check if Azure CLI is installed and you're authenticated
-- List all Azure AI Services in your current subscription
-- Allow you to select which service to configure
-- Create a service principal with "Cognitive Services OpenAI User" role
-- Automatically update your `.env` file with the new credentials
-
-**Prerequisites for the scripts:**
-
-- Azure CLI installed (`az` command available)
-- Authenticated to Azure CLI (`az login` completed)
-- Proper permissions to create service principals in your subscription
-- Deployed `text-embedding-3-small` model in Azure AI Foundry.
 
 ## Running with Docker Compose (Recommended)
 
