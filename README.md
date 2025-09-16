@@ -4,9 +4,10 @@ A Model Context Protocol (MCP) server that provides comprehensive customer sales
 
 ## Prerequisites
 
-1. **Azure CLI**: Install and authenticate with Azure CLI
-2. **Azure OpenAI Resource**: Must have an Azure OpenAI `text-embedding-3-small` and optionally `gpt-4o-mini` resource deployed
-3. **Proper Permissions**: Access to create service principals and assign roles
+1. Docker Desktop installed
+2. Git installed
+3. **Azure CLI**: Install and authenticate with Azure CLI
+4. Access to OpenAI `text-embedding-3-small` model and optionally `gpt-4o-mini` model.
 
 ## Getting Started
 
@@ -20,6 +21,11 @@ A Model Context Protocol (MCP) server that provides comprehensive customer sales
 
     ```bash
     git clone https://github.com/gloveboxes/Zava-MCP-Server-and-PostgreSQL-Sample
+    ```
+
+1. Navigate to the project directory
+
+    ```bash
     cd Zava-MCP-Server-and-PostgreSQL-Sample
     ```
 
@@ -27,7 +33,7 @@ A Model Context Protocol (MCP) server that provides comprehensive customer sales
 
 Run the following scripts to automate the deployment of Azure resources needed for the MCP server.
 
-By default, the scripts will deploy both the `text-embedding-3-small`. Optionally, you can choose to deploy the `gpt-4o-mini` model as well. The scripts will prompt you to include the GPT model deployment.
+The deployment scripts will automatically deploy the `text-embedding-3-small` model. During deployment, you'll have the option to also include the `gpt-4o-mini` model. Note that `gpt-4o-mini` is **not required** for this project and is only included for potential future enhancements.
 
 **Choose the script for your platform:**
 
@@ -59,14 +65,62 @@ docker compose up -d
 docker compose logs -f
 
 # View MCP Server Logs
-docker compose logs -f mcp-server
+docker compose logs -f mcp_server
 
 # View the PostgreSQL Logs
-docker compose logs -f postgres
+docker compose logs -f pg17
 
 # Stop the stack
 docker compose down -v
 ```
+
+## Usage
+
+The following assumes you'll be using the built-in VS Code MCP server support.
+
+1. Start one or more of the MCP server from the `.vscode/mcp.json` configuration
+
+    ```json
+    {
+        "servers": {
+            "zava-sales-analysis-headoffice": {
+                "url": "http://127.0.0.1:8000/mcp",
+                "type": "http",
+                "headers": {"x-rls-user-id": "00000000-0000-0000-0000-000000000000"}
+            },
+            "zava-sales-analysis-seattle": {
+                "url": "http://127.0.0.1:8000/mcp",
+                "type": "http",
+                "headers": {"x-rls-user-id": "f47ac10b-58cc-4372-a567-0e02b2c3d479"}
+            },
+            "zava-sales-analysis-redmond": {
+                "url": "http://127.0.0.1:8000/mcp",
+                "type": "http",
+                "headers": {"x-rls-user-id": "e7f8a9b0-c1d2-3e4f-5678-90abcdef1234"}
+            },
+            "zava-sales-analysis-online": {
+                "url": "http://127.0.0.1:8000/mcp",
+                "type": "http",
+                "headers": {"x-rls-user-id": "2f4e6d8c-1a3b-5c7e-9f0a-b2d4f6e8c0a2"}
+            }
+        },
+        "inputs": []
+    }
+    ```
+
+### Open VS Code AI
+
+1. Open AI Chat mode in VS Code
+2. Type **#zava** and select one of the MCP servers you started
+3. Ask questions about the sales data - See sample queries below
+
+### Sample Queries
+
+1. Show top 20 products by sales revenue
+1. Show sales by store
+1. What were the last quarter's sales by category?
+1. What products do we sell that are similar to "containers for paint"
+
 
 ## Features
 
@@ -125,6 +179,18 @@ Get the current UTC date and time in ISO format.
 
 **Returns:** Current UTC date/time in ISO format (YYYY-MM-DDTHH:MM:SS.fffffZ)
 
+### `semantic_search_products`
+
+Perform a semantic search for products based on user queries.
+
+**Returns:** A list of products matching the search criteria
+
+**Parameters:**
+
+- `query` (str): The search query string
+
+**Returns:** A list of products matching the search criteria
+
 ## Security Features
 
 ### Row Level Security (RLS)
@@ -162,87 +228,6 @@ When a user connects with a specific store's RLS User ID, they will only see:
 
 This ensures data isolation between different store locations while maintaining a unified database schema.
 
-## Installation & Setup
-
-### Prerequisites
-
-- Docker
-- VS Code with DevContainer extension
-
-### Opening the Project
-
-1. Open the project in VS Code.
-2. If prompted, reopen in a DevContainer to ensure all dependencies are available.
-
-### Dependencies
-
-```python
-# Core dependencies from the code
-from mcp.server.fastmcp import Context, FastMCP
-from pydantic import Field
-from sales_analysis_postgres import PostgreSQLSchemaProvider
-```
-
-### Environment Configuration
-
-The project includes predefined RLS User IDs for each store location in the `.env` file:
-
-```properties
-# Default Group Access ID
-RLS_USER_ID="00000000-0000-0000-0000-000000000000"
-
-# Store-specific RLS User IDs
-# Zava Retail Seattle
-# RLS_USER_ID="f47ac10b-58cc-4372-a567-0e02b2c3d479"
-
-# Zava Retail Bellevue
-# RLS_USER_ID="6ba7b810-9dad-11d1-80b4-00c04fd430c8"
-
-# Zava Retail Online
-# RLS_USER_ID="2f4e6d8c-1a3b-5c7e-9f0a-b2d4f6e8c0a2"
-# ... (additional store configurations)
-```
-
-You can uncomment and use the appropriate RLS_USER_ID for your target store location.
-
-## Usage
-
-The following assumes you'll be using the built-in VS Code MCP server support.
-
-### Start the Customer Sales MCP Server in Streamable HTTP Mode
-
-1. Start the MCP server:
-
-    From VS Code, open the customer_sales.py file and run it directly by clicking the "Run" button in VS Code.
-
-    or from the command line, run:
-
-    ```bash
-    cd src/python/mcp_server/sales_analysis
-    python sales_analysis.py
-    ```
-
-2. Enable the MCP server from the mcp.json configuration
-
-    Start the **zava-diy-http** server using the `.vscode/mcp.json` configuration:
-
-    ```json
-    {
-        "servers": {
-            "zava-diy-http": {
-                "url": "http://127.0.0.1:8000/mcp",
-                "type": "http"
-            }
-        },
-        "inputs": []
-    }
-    ```
-
-## Sample Queries
-
-1. Show top 20 products by sales revenue
-1. Show sales by store
-1. What were the last quarter's sales by category?
 
 ## Architecture
 
@@ -278,36 +263,6 @@ The server implements robust error handling:
 - **Resource Management**: Proper cleanup even during errors
 - **User-Friendly Messages**: Clear error messages for troubleshooting
 
-## Example Usage
-
-### Getting Table Schemas
-
-```python
-# Get schemas for customers and orders tables
-schemas = await get_multiple_table_schemas(
-    table_names=["retail.customers", "retail.orders"]
-)
-```
-
-### Executing Queries
-
-```python
-# Analyze sales by category
-query = """
-SELECT
-    c.category_name,
-    COUNT(oi.order_item_id) as total_items_sold,
-    SUM(oi.quantity * oi.unit_price) as total_revenue
-FROM retail.categories c
-JOIN retail.products p ON c.category_id = p.category_id
-JOIN retail.order_items oi ON p.product_id = oi.product_id
-GROUP BY c.category_name
-ORDER BY total_revenue DESC
-LIMIT 20;
-"""
-results = await execute_sales_query(query)
-```
-
 ## Security Considerations
 
 1. **Row Level Security**: All queries respect RLS policies based on user identity
@@ -329,10 +284,10 @@ results = await execute_sales_query(query)
 ### Project Structure
 
 ```text
-sales_analysis/
+mcp_server/
 ├── sales_analysis.py          # Main MCP server implementation
 ├── sales_analysis_postgres.py # PostgreSQL integration layer
-└── README.md                  # This documentation
+├── sales_analysis_text_embedding.py # Text embedding for semantic search tool
 ```
 
 ### Key Components
