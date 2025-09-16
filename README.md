@@ -86,7 +86,12 @@ The following assumes you'll be using the built-in VS Code MCP server support.
     code .
     ```
 
-1. Start one or more of the MCP server from the `.vscode/mcp.json` configuration
+2. Start one or more MCP servers using the configurations in `.vscode/mcp.json`. The file contains four different server configurations, each representing a different store manager role:
+
+   - Each configuration uses a unique RLS (Row Level Security) user ID
+   - These user IDs simulate different store manager identities accessing the database
+   - The RLS system restricts data access based on the manager's assigned store
+   - This mimics real-world scenarios where store managers sign in with different Entra ID accounts
 
     ```json
     {
